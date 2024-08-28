@@ -1,3 +1,6 @@
+"""
+Django command to wait for database.
+"""
 import time
 import os
 from psycopg2 import OperationalError as Psycopg2OpError
@@ -12,7 +15,11 @@ class Command(BaseCommand):
         """Entrypoint for command."""
         self.stdout.write("Waiting for database...")
         self.stdout.write(
-            f"DB_USER: {os.environ.get('DB_USER')}, DB_PASSWORD: {os.environ.get('DB_PASSWORD')}, DB_NAME: {os.environ.get('DB_NAME')}, DB_HOST: {os.environ.get('DB_HOST')}, DB_PORT: {os.environ.get('DB_PORT')}"
+            f"DB_USER: {os.environ.get('DB_USER')}, \
+              DB_PASSWORD: {os.environ.get('DB_PASSWORD')}, \
+              DB_NAME: {os.environ.get('DB_NAME')}, \
+              DB_HOST: {os.environ.get('DB_HOST')}, \
+              DB_PORT: {os.environ.get('DB_PORT')}"
         )
         db_up = False
         while db_up is False:
