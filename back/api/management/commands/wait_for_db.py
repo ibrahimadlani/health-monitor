@@ -1,6 +1,7 @@
 """
 Django command to wait for database.
 """
+
 import time
 import os
 from psycopg2 import OperationalError as Psycopg2OpError
