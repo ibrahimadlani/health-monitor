@@ -8,7 +8,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "loremispum"
+SECRET_KEY = str(os.environ.get("DJANGO_SECRET_KEY"))
 
 DEBUG = str(os.environ.get("DEBUG")) == "1"
 
@@ -154,3 +154,5 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
+
+AUTH_USER_MODEL = 'api.CustomUser'
