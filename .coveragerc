@@ -1,0 +1,5 @@
+[run]
+omit =
+    back/core/asgi.py
+    back/core/wsgi.py
+    back/manage.py

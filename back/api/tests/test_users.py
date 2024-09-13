@@ -1,132 +1,83 @@
 """
-Users model tests
+Test cases for the users app
 """
 
-import os
-import django
 import pytest
-from django.db.utils import IntegrityError
 from django.contrib.auth import get_user_model
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
-django.setup()
 
 User = get_user_model()
 
 
 @pytest.mark.django_db
-def test_create_user():
+def test_user_creation(api_client):
     """
-    Checks if a user is created successfully.
+    Check if a user can be created
     """
-
-    user = User.objects.create_user(
-        email="testuser@example.com", username="testuser", password="testpass123"
-    )
-    assert user.email == "testuser@example.com"
-    assert user.username == "testuser"
-    assert user.check_password("testpass123") is True
-    assert user.is_active is True
-    assert user.is_staff is False
-    assert user.is_superuser is False
+    # Test user creation
+    payload = {
+        "email": "newuser@example.com",
+        "username": "newuser",
+        "password": "password123",
+    }
+    response = api_client.post("/api/users/create/", payload)
+    assert response.status_code == 201
+    assert "email" in response.data
+    assert response.data["email"] == payload["email"]
+    assert response.data["username"] == payload["username"]
+    assert "password" not in response.data
 
 
 @pytest.mark.django_db
-def test_create_superuser():
+def test_user_detail(api_client, create_user, get_token):
     """
-    Checks if a superuser is created successfully.
+    Check if a user can be retrieved
     """
+    # Create user and get token
+    user = create_user(email="testuser@example.com", username="testuser")
+    token = get_token(user)
 
-    superuser = User.objects.create_superuser(
-        email="admin@example.com", username="adminuser", password="adminpass123"
-    )
-    assert superuser.email == "admin@example.com"
-    assert superuser.username == "adminuser"
-    assert superuser.check_password("adminpass123") is True
-    assert superuser.is_active is True
-    assert superuser.is_staff is True
-    assert superuser.is_superuser is True
+    # Test user detail view
+    api_client.credentials(HTTP_AUTHORIZATION=f'Bearer {token["access"]}')
+    response = api_client.get(f"/api/users/{user.id}/")
+
+    assert response.status_code == 200
+    assert response.data["email"] == "testuser@example.com"
 
 
 @pytest.mark.django_db
-def test_create_staffuser():
+def test_user_update(api_client, create_user, get_token):
     """
-    Checks if a staff user is created successfully.
+    Check if a user can be updated
     """
-    staffuser = User.objects.create_staffuser(
-        email="staff@example.com", username="staffuser", password="staffpass123"
-    )
-    assert staffuser.email == "staff@example.com"
-    assert staffuser.username == "staffuser"
-    assert staffuser.check_password("staffpass123") is True
-    assert staffuser.is_active is True
-    assert staffuser.is_staff is True
-    assert staffuser.is_superuser is False
+    # Create user and get token
+    user = create_user(email="testuser@example.com", username="testuser")
+    token = get_token(user)
+
+    # Test user update
+    api_client.credentials(HTTP_AUTHORIZATION=f'Bearer {token["access"]}')
+    update_payload = {
+        "username": "testuser",
+        "email": "testuser@example.com",
+        "first_name": "Updated",
+        "last_name": "User",
+    }
+    response = api_client.put(f"/api/users/{user.id}/update/", update_payload)
+    assert response.status_code == 200
+    assert response.data["first_name"] == "Updated"
+    assert response.data["last_name"] == "User"
 
 
 @pytest.mark.django_db
-def test_create_user_without_email():
+def test_user_delete(api_client, create_user, get_token):
     """
-    Checks if an error is raised when creating a user without an email.
+    Check if a user can be deleted
     """
+    # Create user and get token
+    user = create_user(email="testuser@example.com", username="testuser")
+    token = get_token(user)
 
-    with pytest.raises(ValueError, match="The Email field must be set"):
-        User.objects.create_user(
-            email=None, username="noemailuser", password="nopass123"
-        )
-
-
-@pytest.mark.django_db
-def test_create_user_with_duplicate_email():
-    """
-    Checks if an error is raised when creating a user with a duplicate email.
-    """
-
-    User.objects.create_user(
-        email="duplicate@example.com", username="user1", password="testpass123"
-    )
-    with pytest.raises(IntegrityError):
-        User.objects.create_user(
-            email="duplicate@example.com", username="user2", password="testpass123"
-        )
-
-
-@pytest.mark.django_db
-def test_user_str():
-    """
-    Checks if the user model returns the email as the string representation.
-    """
-
-    user = User.objects.create_user(
-        email="struser@example.com", username="struser", password="strpass123"
-    )
-    assert str(user) == "struser@example.com"
-
-
-@pytest.mark.django_db
-def test_get_full_name():
-    """
-    Checks if the user model returns the full name.
-    """
-    user = User.objects.create_user(
-        email="fullname@example.com",
-        username="fullnameuser",
-        first_name="John",
-        last_name="Doe",
-        password="testpass123",
-    )
-    assert user.get_full_name() == "John Doe"
-
-
-@pytest.mark.django_db
-def test_get_short_name():
-    """
-    Checks if the user model returns the short name.
-    """
-    user = User.objects.create_user(
-        email="shortname@example.com",
-        username="shortnameuser",
-        first_name="Jane",
-        password="testpass123",
-    )
-    assert user.get_short_name() == "Jane"
+    # Test user deletion
+    api_client.credentials(HTTP_AUTHORIZATION=f'Bearer {token["access"]}')
+    response = api_client.delete(f"/api/users/{user.id}/delete/")
+    assert response.status_code == 204

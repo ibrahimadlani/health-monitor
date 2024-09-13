@@ -13,11 +13,11 @@ source ./back/venv/bin/activate
 
 # Run tests
 echo -e "${YELLOW}\t🧪 Running pytest...${RESET}"
-pytest > /dev/null 2>&1
+pytest ./back --cov=./back/ > /dev/null 2>&1
 if [ $? -eq 0 ]; then
   echo -e "${GREEN}\t\t✓ - All tests passed!${RESET}\n"
 else
-  echo -e "${RED}\t\t❌ Some tests failed! Please fix them before committing.${RESET}\n"
+  echo -e "${RED}\t\t✗ - Some tests failed! Please fix them before committing.${RESET}\n"
   deactivate
   exit 1
 fi
@@ -28,7 +28,7 @@ black ./back > /dev/null 2>&1
 if [ $? -eq 0 ]; then
   echo -e "${GREEN}\t\t✓ - Code formatted successfully!${RESET}\n"
 else
-  echo -e "${RED}\t\t❌ Code formatting failed! Please check black output.${RESET}"
+  echo -e "${RED}\t\t✗ - Code formatting failed! Please check black output.${RESET}"
   deactivate
   exit 1
 fi
@@ -39,7 +39,7 @@ pylint --rcfile=./back/.pylintrc ./back/core ./back/api > /dev/null 2>&1
 if [ $? -eq 0 ]; then
   echo -e "${GREEN}\t\t✓ - Pylint passed on core and api!${RESET}\n"
 else
-  echo -e "${RED}\t\t❌ Pylint failed on core or api! Please fix linting issues.${RESET}"
+  echo -e "${RED}\t\t✗ - Pylint failed on core or api! Please fix linting issues.${RESET}"
   deactivate
   exit 1
 fi

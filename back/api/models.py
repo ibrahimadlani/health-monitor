@@ -8,6 +8,7 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 from django.db import models
+from django.utils import timezone
 
 
 class CustomUserManager(BaseUserManager):
@@ -107,7 +108,195 @@ class WeightRecord(models.Model):
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     weight = models.FloatField()
-    date = models.DateField(auto_now_add=True)
+    date = models.DateTimeField(default=timezone.now)
+    note = models.TextField(blank=True)
+
+    def __str__(self):
+        """
+        This method returns the string representation of the weight record.
+        """
+        return f"{self.user} weighted {self.weight}kg on {self.date}"
+
+
+class NeckMeasurement(models.Model):
+    """
+    This class is used to create a neck measurement model.
+    """
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    size = models.FloatField()
+    date = models.DateTimeField(default=timezone.now)
+    note = models.TextField(blank=True)
+
+    def __str__(self):
+        """
+        This method returns the string representation of the neck measurement.
+        """
+        return f"{self.user} measured {self.size}cm on {self.date}"
+
+
+class ChestMeasurement(models.Model):
+    """
+    This class is used to create a chest measurement model.
+    """
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    size = models.FloatField()
+    date = models.DateTimeField(default=timezone.now)
+    note = models.TextField(blank=True)
+
+    def __str__(self):
+        """
+        This method returns the string representation of the chest measurement.
+        """
+        return f"{self.user} measured {self.size}cm on {self.date}"
+
+
+class WaistMeasurement(models.Model):
+    """
+    This class is used to create a waist measurement model.
+    """
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    size = models.FloatField()
+    date = models.DateTimeField(default=timezone.now)
+    note = models.TextField(blank=True)
+
+    def __str__(self):
+        """
+        This method returns the string representation of the waist measurement.
+        """
+        return f"{self.user} measured {self.size}cm on {self.date}"
+
+
+class ThighMeasurement(models.Model):
+    """
+    This class is used to create a thigh measurement model.
+    """
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    size = models.FloatField()
+    date = models.DateTimeField(default=timezone.now)
+    note = models.TextField(blank=True)
+
+    def __str__(self):
+        """
+        This method returns the string representation of the thigh measurement.
+        """
+        return f"{self.user} measured {self.size}cm on {self.date}"
+
+
+class ArmMeasurement(models.Model):
+    """
+    This class is used to create a arm measurement model.
+    """
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    size = models.FloatField()
+    date = models.DateTimeField(default=timezone.now)
+    note = models.TextField(blank=True)
+
+    def __str__(self):
+        """
+        This method returns the string representation of the arm measurement.
+        """
+        return f"{self.user} measured {self.size}cm on {self.date}"
+
+
+class CalfMeasurement(models.Model):
+    """
+    This class is used to create a calf measurement model.
+    """
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    size = models.FloatField()
+    date = models.DateTimeField(default=timezone.now)
+    note = models.TextField(blank=True)
+
+    def __str__(self):
+        """
+        This method returns the string representation of the calf measurement.
+        """
+        return f"{self.user} measured {self.size}cm on {self.date}"
+
+
+class ForearmMeasurement(models.Model):
+    """
+    This class is used to create a forearm measurement model.
+    """
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    size = models.FloatField()
+    date = models.DateTimeField(default=timezone.now)
+    note = models.TextField(blank=True)
+
+    def __str__(self):
+        """
+        This method returns the string representation of the forearm measurement.
+        """
+        return f"{self.user} measured {self.size}cm on {self.date}"
+
+
+class ShoulderMeasurement(models.Model):
+    """
+    This class is used to create a shoulder measurement model.
+    """
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    size = models.FloatField()
+    date = models.DateTimeField(default=timezone.now)
+    note = models.TextField(blank=True)
+
+    def __str__(self):
+        """
+        This method returns the string representation of the shoulder measurement.
+        """
+        return f"{self.user} measured {self.size}cm on {self.date}"
+
+
+class LovehandleMeasurement(models.Model):
+    """
+    This class is used to create a love handle measurement model.
+    """
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    size = models.FloatField()
+    date = models.DateTimeField(default=timezone.now)
+    note = models.TextField(blank=True)
+
+    def __str__(self):
+        """
+        This method returns the string representation of the love handle measurement.
+        """
+        return f"{self.user} measured {self.size}cm on {self.date}"
+
+
+class BeltMeasurement(models.Model):
+    """
+    This class is used to create a belt measurement model.
+    """
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    size = models.FloatField()
+    date = models.DateTimeField(default=timezone.now)
+    note = models.TextField(blank=True)
+
+    def __str__(self):
+        """
+        This method returns the string representation of the belt measurement.
+        """
+        return f"{self.user} measured {self.size}cm on {self.date}"
+
+
+class WeightMeasurement(models.Model):
+    """
+    This class is used to create a weight record model.
+    """
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    weight = models.FloatField()
+    date = models.DateTimeField(default=timezone.now)
+    note = models.TextField(blank=True)
 
     def __str__(self):
         """
